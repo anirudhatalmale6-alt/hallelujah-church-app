@@ -1,0 +1,29 @@
+{
+  "name": "hallelujah-app",
+  "version": "1.0.0",
+  "main": "App.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web"
+  },
+  "dependencies": {
+    "@expo/vector-icons": "^15.1.1",
+    "@react-navigation/bottom-tabs": "^7.15.9",
+    "@react-navigation/native": "^7.2.2",
+    "@react-navigation/native-stack": "^7.14.11",
+    "expo": "^55.0.15",
+    "expo-constants": "^55.0.14",
+    "expo-device": "^55.0.15",
+    "expo-linking": "^55.0.13",
+    "expo-notifications": "^55.0.19",
+    "expo-status-bar": "^55.0.5",
+    "expo-web-browser": "^55.0.14",
+    "react": "^19.2.5",
+    "react-native": "^0.85.1",
+    "react-native-safe-area-context": "^5.7.0",
+    "react-native-screens": "^4.24.0",
+    "react-native-webview": "^13.16.1"
+  }
+}
