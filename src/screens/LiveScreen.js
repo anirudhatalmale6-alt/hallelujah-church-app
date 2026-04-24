@@ -16,7 +16,7 @@ export default function LiveScreen() {
       <View style={styles.card}>
         <Text style={styles.title}>Live Church Service</Text>
         <Text style={styles.subtitle}>
-          Join us for worship every Sunday at 10:00 AM
+          Join us for worship every Sunday at 8:00 AM and 11:00 AM
         </Text>
 
         {showVideo ? (
