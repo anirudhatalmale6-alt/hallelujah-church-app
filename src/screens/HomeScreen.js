@@ -33,22 +33,29 @@ export default function HomeScreen({ navigation }) {
         <View style={styles.serviceRow}>
           <Ionicons name="calendar-outline" size={20} color={COLORS.secondary} />
           <View style={styles.serviceInfo}>
-            <Text style={styles.serviceDay}>Sunday Worship</Text>
-            <Text style={styles.serviceTime}>10:00 AM</Text>
+            <Text style={styles.serviceDay}>Sunday 1st Service</Text>
+            <Text style={styles.serviceTime}>8:00 AM</Text>
           </View>
         </View>
         <View style={styles.serviceRow}>
           <Ionicons name="calendar-outline" size={20} color={COLORS.secondary} />
           <View style={styles.serviceInfo}>
-            <Text style={styles.serviceDay}>Wednesday Bible Study</Text>
+            <Text style={styles.serviceDay}>Sunday 2nd Service</Text>
+            <Text style={styles.serviceTime}>11:00 AM</Text>
+          </View>
+        </View>
+        <View style={styles.serviceRow}>
+          <Ionicons name="calendar-outline" size={20} color={COLORS.secondary} />
+          <View style={styles.serviceInfo}>
+            <Text style={styles.serviceDay}>Tuesday Bible Study</Text>
             <Text style={styles.serviceTime}>7:00 PM</Text>
           </View>
         </View>
         <View style={styles.serviceRow}>
           <Ionicons name="calendar-outline" size={20} color={COLORS.secondary} />
           <View style={styles.serviceInfo}>
-            <Text style={styles.serviceDay}>Friday Prayer</Text>
-            <Text style={styles.serviceTime}>7:00 PM</Text>
+            <Text style={styles.serviceDay}>Thursday Fasting - Prayer</Text>
+            <Text style={styles.serviceTime}>9:00 AM</Text>
           </View>
         </View>
       </View>

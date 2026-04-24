@@ -8,27 +8,45 @@ import { COLORS, CHURCH } from '../constants/theme';
 const events = [
   {
     id: '1',
-    title: 'Sunday Worship Service',
+    title: 'Sunday 1st Service',
     day: 'Every Sunday',
-    time: '10:00 AM',
+    time: '8:00 AM',
     icon: 'musical-notes',
     description: 'Join us for praise, worship, and the Word of God.',
   },
   {
     id: '2',
-    title: 'Wednesday Bible Study',
-    day: 'Every Wednesday',
+    title: 'Sunday 2nd Service',
+    day: 'Every Sunday',
+    time: '11:00 AM',
+    icon: 'musical-notes',
+    description: 'Join us for our second worship service.',
+  },
+  {
+    id: '3',
+    title: 'Tuesday Bible Study',
+    day: 'Every Tuesday',
     time: '7:00 PM',
     icon: 'book',
     description: 'Deepen your understanding of the Scriptures.',
   },
   {
-    id: '3',
-    title: 'Friday Prayer Night',
-    day: 'Every Friday',
-    time: '7:00 PM',
+    id: '4',
+    title: 'Thursday Fasting - Prayer',
+    day: 'Every Thursday',
+    time: '9:00 AM',
     icon: 'hand-left',
-    description: 'Come together in prayer and intercession.',
+    description: 'Come together in fasting and prayer.',
+  },
+];
+
+const specialEvents = [
+  {
+    id: 's1',
+    title: '6 Pou 6',
+    date: 'July 5, 2026',
+    icon: 'star',
+    description: 'Special church event. Mark your calendar!',
   },
 ];
 
@@ -55,6 +73,27 @@ export default function EventsScreen() {
           </View>
         </View>
       ))}
+
+      {specialEvents.length > 0 && (
+        <>
+          <Text style={[styles.header, { marginTop: 20 }]}>Upcoming Special Events</Text>
+          {specialEvents.map((event) => (
+            <View key={event.id} style={styles.card}>
+              <View style={[styles.iconBox, { backgroundColor: COLORS.secondary }]}>
+                <Ionicons name={event.icon} size={28} color={COLORS.textWhite} />
+              </View>
+              <View style={styles.cardContent}>
+                <Text style={styles.eventTitle}>{event.title}</Text>
+                <View style={styles.timeRow}>
+                  <Ionicons name="calendar-outline" size={16} color={COLORS.secondary} />
+                  <Text style={styles.timeText}>{event.date}</Text>
+                </View>
+                <Text style={styles.eventDesc}>{event.description}</Text>
+              </View>
+            </View>
+          ))}
+        </>
+      )}
 
       <View style={styles.card}>
         <View style={styles.cardContent}>
