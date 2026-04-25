@@ -25,15 +25,6 @@
       "package": "org.hallelujahinthecity.app",
       "versionCode": 1
     },
-    "plugins": [
-      [
-        "expo-notifications",
-        {
-          "icon": "./assets/icon.png",
-          "color": "#5a3e1b"
-        }
-      ]
-    ],
     "scheme": "hallelujah"
   }
 }
