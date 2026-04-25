@@ -66,10 +66,10 @@ export default function HomeScreen({ navigation }) {
         <View style={styles.quickGrid}>
           <QuickLink icon="play-circle" label="Watch Live" onPress={() => navigation.navigate('Live')} />
           <QuickLink icon="heart" label="Give" onPress={() => navigation.navigate('Give')} />
-          <QuickLink icon="hand-left" label="Prayer" onPress={() => navigation.getParent().navigate('MoreTab', { screen: 'Prayer' })} />
-          <QuickLink icon="call" label="Contact" onPress={() => navigation.getParent().navigate('MoreTab', { screen: 'Contact' })} />
-          <QuickLink icon="people" label="Connect" onPress={() => navigation.getParent().navigate('MoreTab', { screen: 'Connection' })} />
-          <QuickLink icon="calendar" label="Events" onPress={() => navigation.getParent().navigate('MoreTab', { screen: 'Events' })} />
+          <QuickLink icon="hand-left" label="Prayer" onPress={() => navigation.navigate('MoreTab', { screen: 'Prayer' })} />
+          <QuickLink icon="call" label="Contact" onPress={() => navigation.navigate('MoreTab', { screen: 'Contact' })} />
+          <QuickLink icon="people" label="Connect" onPress={() => navigation.navigate('MoreTab', { screen: 'Connection' })} />
+          <QuickLink icon="calendar" label="Events" onPress={() => navigation.navigate('MoreTab', { screen: 'Events' })} />
         </View>
       </View>
 

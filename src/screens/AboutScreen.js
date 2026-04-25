@@ -9,7 +9,7 @@ export default function AboutScreen({ navigation }) {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <View style={styles.hero}>
-        <Ionicons name="church" size={50} color={COLORS.secondary} />
+        <Ionicons name="home" size={50} color={COLORS.secondary} />
         <Text style={styles.heroTitle}>{CHURCH.name}</Text>
         <Text style={styles.heroSubtitle}>{CHURCH.address}</Text>
       </View>

@@ -3,7 +3,6 @@ import {
   View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Picker } from 'react-native';
 import { COLORS, CHURCH } from '../constants/theme';
 
 const SelectField = ({ label, value, onValueChange, items }) => (
