@@ -59,7 +59,7 @@ export default function LiveScreen() {
         </Text>
         <TouchableOpacity
           style={styles.radioBtn}
-          onPress={() => Linking.openURL(CHURCH.website + '/video-live.htm')}
+          onPress={() => Linking.openURL(CHURCH.radioUrl)}
         >
           <Ionicons name="radio" size={22} color="#fff" />
           <Text style={styles.ytBtnText}>Listen Now</Text>

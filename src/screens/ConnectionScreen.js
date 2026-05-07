@@ -1,31 +1,65 @@
 import React, { useState } from 'react';
 import {
   View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, Alert,
+  Modal, FlatList,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, CHURCH } from '../constants/theme';
 
-const SelectField = ({ label, value, onValueChange, items }) => (
-  <View style={styles.selectContainer}>
-    <Text style={styles.label}>{label}</Text>
-    <View style={styles.selectBox}>
-      <TouchableOpacity
-        style={styles.selectTouchable}
-        onPress={() => {
-          // On mobile, we'll cycle through options or show alert picker
-          const currentIdx = items.findIndex(i => i.value === value);
-          const nextIdx = (currentIdx + 1) % items.length;
-          onValueChange(items[nextIdx].value);
-        }}
-      >
-        <Text style={styles.selectText}>
-          {items.find(i => i.value === value)?.label || 'Select...'}
+const SelectField = ({ label, value, onValueChange, items }) => {
+  const [visible, setVisible] = useState(false);
+  const selectedLabel = items.find(i => i.value === value)?.label || 'Select...';
+
+  return (
+    <View style={styles.selectContainer}>
+      <Text style={styles.label}>{label}</Text>
+      <TouchableOpacity style={styles.selectBox} onPress={() => setVisible(true)}>
+        <Text style={[styles.selectText, !value && { color: COLORS.textLight }]}>
+          {selectedLabel}
         </Text>
         <Ionicons name="chevron-down" size={18} color={COLORS.textLight} />
       </TouchableOpacity>
+
+      <Modal visible={visible} transparent animationType="fade">
+        <TouchableOpacity
+          style={styles.modalOverlay}
+          activeOpacity={1}
+          onPress={() => setVisible(false)}
+        >
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>{label}</Text>
+            <FlatList
+              data={items}
+              keyExtractor={(item) => item.value}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  style={[
+                    styles.modalItem,
+                    item.value === value && styles.modalItemSelected,
+                  ]}
+                  onPress={() => {
+                    onValueChange(item.value);
+                    setVisible(false);
+                  }}
+                >
+                  <Text style={[
+                    styles.modalItemText,
+                    item.value === value && styles.modalItemTextSelected,
+                  ]}>
+                    {item.label}
+                  </Text>
+                  {item.value === value && (
+                    <Ionicons name="checkmark" size={20} color={COLORS.secondary} />
+                  )}
+                </TouchableOpacity>
+              )}
+            />
+          </View>
+        </TouchableOpacity>
+      </Modal>
     </View>
-  </View>
-);
+  );
+};
 
 export default function ConnectionScreen() {
   const [name, setName] = useState('');
@@ -228,9 +262,30 @@ const styles = StyleSheet.create({
   radioRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 8, gap: 8 },
   radioText: { fontSize: 15, color: COLORS.text },
   selectContainer: { marginBottom: 5 },
-  selectBox: { borderWidth: 1, borderColor: '#ccc', borderRadius: 5, backgroundColor: '#fff' },
-  selectTouchable: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10 },
+  selectBox: {
+    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+    borderWidth: 1, borderColor: '#ccc', borderRadius: 5, backgroundColor: '#fff', padding: 10,
+  },
   selectText: { fontSize: 15, color: COLORS.text },
+  modalOverlay: {
+    flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', alignItems: 'center',
+  },
+  modalContent: {
+    backgroundColor: '#fff', borderRadius: 12, width: '85%', maxHeight: '60%',
+    paddingVertical: 15, shadowColor: '#000', shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3, shadowRadius: 8, elevation: 10,
+  },
+  modalTitle: {
+    fontSize: 17, fontWeight: '700', color: COLORS.primary, textAlign: 'center',
+    paddingBottom: 12, borderBottomWidth: 1, borderBottomColor: '#eee', marginHorizontal: 15,
+  },
+  modalItem: {
+    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+    paddingVertical: 14, paddingHorizontal: 20, borderBottomWidth: 1, borderBottomColor: '#f5f5f5',
+  },
+  modalItemSelected: { backgroundColor: '#fdf6e3' },
+  modalItemText: { fontSize: 16, color: COLORS.text },
+  modalItemTextSelected: { fontWeight: '700', color: COLORS.primary },
   submitBtn: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
     backgroundColor: COLORS.primary, paddingVertical: 14, borderRadius: 8, gap: 8, marginTop: 15,

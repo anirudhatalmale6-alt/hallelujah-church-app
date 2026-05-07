@@ -1,28 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import {
-  View, Text, StyleSheet, FlatList, TouchableOpacity, Image, Linking,
-  ActivityIndicator, RefreshControl,
+  View, Text, StyleSheet, FlatList, TouchableOpacity, Image,
+  ActivityIndicator, RefreshControl, Modal,
 } from 'react-native';
+import { WebView } from 'react-native-webview';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, CHURCH } from '../constants/theme';
-
-const YOUTUBE_API_URL = `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=${CHURCH.youtubeChannelId}&order=date&type=video&maxResults=20`;
 
 export default function SermonsScreen() {
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState(null);
+  const [playingVideo, setPlayingVideo] = useState(null);
 
   const fetchVideos = async () => {
     try {
       setError(null);
-      // Use RSS feed as a free alternative (no API key needed)
       const rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${CHURCH.youtubeChannelId}`;
       const response = await fetch(rssUrl);
       const text = await response.text();
 
-      // Parse RSS XML for video entries
       const entries = [];
       const entryRegex = /<entry>([\s\S]*?)<\/entry>/g;
       let match;
@@ -55,12 +53,8 @@ export default function SermonsScreen() {
     fetchVideos();
   }, []);
 
-  const openVideo = (videoId) => {
-    Linking.openURL(`https://www.youtube.com/watch?v=${videoId}`);
-  };
-
   const renderVideo = ({ item }) => (
-    <TouchableOpacity style={styles.videoCard} onPress={() => openVideo(item.id)}>
+    <TouchableOpacity style={styles.videoCard} onPress={() => setPlayingVideo(item)}>
       <Image source={{ uri: item.thumbnail }} style={styles.thumbnail} />
       <View style={styles.playOverlay}>
         <Ionicons name="play-circle" size={44} color="rgba(255,255,255,0.9)" />
@@ -112,6 +106,32 @@ export default function SermonsScreen() {
           </View>
         }
       />
+
+      <Modal visible={!!playingVideo} animationType="slide" onRequestClose={() => setPlayingVideo(null)}>
+        <View style={styles.playerContainer}>
+          <View style={styles.playerHeader}>
+            <TouchableOpacity onPress={() => setPlayingVideo(null)} style={styles.closeBtn}>
+              <Ionicons name="close" size={28} color={COLORS.textWhite} />
+            </TouchableOpacity>
+            <Text style={styles.playerTitle} numberOfLines={1}>
+              {playingVideo?.title}
+            </Text>
+          </View>
+          {playingVideo && (
+            <WebView
+              source={{ uri: `https://www.youtube.com/embed/${playingVideo.id}?autoplay=1&rel=0` }}
+              style={styles.player}
+              javaScriptEnabled
+              allowsInlineMediaPlayback
+              mediaPlaybackRequiresUserAction={false}
+            />
+          )}
+          <View style={styles.playerInfo}>
+            <Text style={styles.playerVideoTitle}>{playingVideo?.title}</Text>
+            <Text style={styles.playerDate}>{playingVideo?.date}</Text>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -175,4 +195,23 @@ const styles = StyleSheet.create({
     color: COLORS.textLight,
     marginTop: 4,
   },
+  playerContainer: { flex: 1, backgroundColor: '#000' },
+  playerHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: COLORS.primary,
+    paddingTop: 50,
+    paddingBottom: 12,
+    paddingHorizontal: 15,
+  },
+  closeBtn: { marginRight: 12 },
+  playerTitle: { flex: 1, color: COLORS.textWhite, fontSize: 16, fontWeight: '600' },
+  player: { flex: 1, backgroundColor: '#000' },
+  playerInfo: {
+    backgroundColor: COLORS.primary,
+    padding: 15,
+    paddingBottom: 30,
+  },
+  playerVideoTitle: { color: COLORS.textWhite, fontSize: 16, fontWeight: '700', lineHeight: 22 },
+  playerDate: { color: 'rgba(255,255,255,0.7)', fontSize: 13, marginTop: 5 },
 });

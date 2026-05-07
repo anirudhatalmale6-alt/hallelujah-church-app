@@ -2,20 +2,19 @@
   "expo": {
     "name": "Hallelujah In The City",
     "slug": "hallelujah-in-the-city",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
+    "newArchEnabled": false,
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#5a3e1b"
     },
-    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "org.hallelujahinthecity.app",
-      "buildNumber": "1"
+      "bundleIdentifier": "org.hallelujahinthecity.app"
     },
     "android": {
       "adaptiveIcon": {
@@ -23,7 +22,7 @@
         "backgroundColor": "#5a3e1b"
       },
       "package": "org.hallelujahinthecity.app",
-      "versionCode": 1
+      "versionCode": 3
     },
     "scheme": "hallelujah"
   }

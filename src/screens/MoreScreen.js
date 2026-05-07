@@ -25,6 +25,7 @@ export default function MoreScreen({ navigation }) {
         <Text style={styles.sectionTitle}>Church</Text>
         <MenuItem icon="calendar" label="Events & Calendar" onPress={() => navigation.navigate('Events')} color="#4CAF50" />
         <MenuItem icon="hand-left" label="Prayer Request" onPress={() => navigation.navigate('Prayer')} color="#9C27B0" />
+        <MenuItem icon="videocam" label="Past Sermons" onPress={() => navigation.navigate('PastSermons')} color="#673AB7" />
         <MenuItem icon="information-circle" label="About Us" onPress={() => navigation.navigate('About')} color="#2196F3" />
         <MenuItem icon="person" label="About Our Pastor" onPress={() => navigation.navigate('Pastor')} color="#FF9800" />
       </View>
@@ -48,7 +49,7 @@ export default function MoreScreen({ navigation }) {
         <MenuItem icon="mail" label={CHURCH.email} onPress={() => Linking.openURL(`mailto:${CHURCH.email}`)} color="#F44336" />
       </View>
 
-      <Text style={styles.version}>Hallelujah In The City App v1.0.0</Text>
+      <Text style={styles.version}>Hallelujah In The City App v2.0.0</Text>
       <View style={{ height: 20 }} />
     </ScrollView>
   );
