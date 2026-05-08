@@ -49,7 +49,7 @@ export default function MoreScreen({ navigation }) {
         <MenuItem icon="mail" label={CHURCH.email} onPress={() => Linking.openURL(`mailto:${CHURCH.email}`)} color="#F44336" />
       </View>
 
-      <Text style={styles.version}>Hallelujah In The City App v2.0.0</Text>
+      <Text style={styles.version}>Hallelujah In The City App v2.1.0</Text>
       <View style={{ height: 20 }} />
     </ScrollView>
   );

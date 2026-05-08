@@ -14,6 +14,13 @@ const SLIDER_IMAGES = [
   { uri: CHURCH.website + '/JQuery/imageJQR-5.jpg' },
 ];
 
+const SLIDESHOW_GALLERIES = [
+  { title: 'Slideshow 1', thumb: CHURCH.website + '/slideshows/thumb-slideshow-1.jpg', images: 10, prefix: 'Fslide1' },
+  { title: 'Slideshow 2', thumb: CHURCH.website + '/slideshows/thumb-slideshow-2.jpg', images: 10, prefix: 'Fslide2' },
+  { title: 'Slideshow 3', thumb: CHURCH.website + '/slideshows/thumb-slideshow-3.jpg', images: 10, prefix: 'Fslide3' },
+  { title: 'Slideshow 4', thumb: CHURCH.website + '/slideshows/thumb-slideshow-4.jpg', images: 10, prefix: 'Fslide4' },
+];
+
 const QuickLink = ({ icon, label, onPress, color }) => (
   <TouchableOpacity style={styles.quickLink} onPress={onPress}>
     <View style={[styles.quickIcon, color && { backgroundColor: color }]}>
@@ -27,6 +34,7 @@ export default function HomeScreen({ navigation }) {
   const [activeSlide, setActiveSlide] = useState(0);
   const flatListRef = useRef(null);
   const { width: screenWidth } = useWindowDimensions();
+  const sliderHeight = Math.round(screenWidth * 0.3);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -45,10 +53,13 @@ export default function HomeScreen({ navigation }) {
     index,
   }), [screenWidth]);
 
+  const overlayHeight = 52;
+  const totalSliderHeight = sliderHeight + overlayHeight;
+
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       {/* Image Slider */}
-      <View style={styles.sliderContainer}>
+      <View style={[styles.sliderContainer, { height: totalSliderHeight }]}>
         <FlatList
           ref={flatListRef}
           data={SLIDER_IMAGES}
@@ -62,14 +73,23 @@ export default function HomeScreen({ navigation }) {
             setActiveSlide(index);
           }}
           renderItem={({ item }) => (
-            <Image source={{ uri: item.uri }} style={[styles.sliderImage, { width: screenWidth }]} />
+            <Image
+              source={{ uri: item.uri }}
+              style={{ width: screenWidth, height: sliderHeight, resizeMode: 'cover' }}
+            />
           )}
         />
         <View style={styles.overlay}>
-          <Text style={styles.heroTitle}>{CHURCH.name}</Text>
-          <Text style={styles.heroSubtitle}>{CHURCH.tagline}</Text>
+          <Image
+            source={{ uri: CHURCH.website + '/picts/home-small-5.jpg' }}
+            style={styles.heroLogo}
+          />
+          <View>
+            <Text style={styles.heroTitle}>{CHURCH.name}</Text>
+            <Text style={styles.heroSubtitle}>{CHURCH.tagline}</Text>
+          </View>
         </View>
-        <View style={styles.dots}>
+        <View style={[styles.dots, { bottom: overlayHeight + 8 }]}>
           {SLIDER_IMAGES.map((_, i) => (
             <View key={i} style={[styles.dot, activeSlide === i && styles.dotActive]} />
           ))}
@@ -119,6 +139,23 @@ export default function HomeScreen({ navigation }) {
         ))}
       </View>
 
+      {/* Visit Us - BEFORE Past Sermons */}
+      <View style={styles.card}>
+        <Text style={styles.cardTitle}>Visit Us</Text>
+        <TouchableOpacity style={styles.contactRow} onPress={() => Linking.openURL(`tel:${CHURCH.phone.replace(/[^\d]/g, '')}`)}>
+          <Ionicons name="call-outline" size={20} color={COLORS.secondary} />
+          <Text style={styles.contactText}>{CHURCH.phone}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.contactRow} onPress={() => Linking.openURL(`mailto:${CHURCH.email}`)}>
+          <Ionicons name="mail-outline" size={20} color={COLORS.secondary} />
+          <Text style={styles.contactText}>{CHURCH.email}</Text>
+        </TouchableOpacity>
+        <View style={styles.contactRow}>
+          <Ionicons name="location-outline" size={20} color={COLORS.secondary} />
+          <Text style={styles.contactText}>{CHURCH.address}</Text>
+        </View>
+      </View>
+
       {/* Past Sermons */}
       <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('MoreTab', { screen: 'PastSermons' })}>
         <Text style={styles.cardTitle}>Past Sermons</Text>
@@ -137,21 +174,24 @@ export default function HomeScreen({ navigation }) {
         </View>
       </TouchableOpacity>
 
-      {/* Contact Info */}
+      {/* Photo Galleries */}
       <View style={styles.card}>
-        <Text style={styles.cardTitle}>Visit Us</Text>
-        <TouchableOpacity style={styles.contactRow} onPress={() => Linking.openURL(`tel:${CHURCH.phone.replace(/[^\d]/g, '')}`)}>
-          <Ionicons name="call-outline" size={20} color={COLORS.secondary} />
-          <Text style={styles.contactText}>{CHURCH.phone}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.contactRow} onPress={() => Linking.openURL(`mailto:${CHURCH.email}`)}>
-          <Ionicons name="mail-outline" size={20} color={COLORS.secondary} />
-          <Text style={styles.contactText}>{CHURCH.email}</Text>
-        </TouchableOpacity>
-        <View style={styles.contactRow}>
-          <Ionicons name="location-outline" size={20} color={COLORS.secondary} />
-          <Text style={styles.contactText}>{CHURCH.address}</Text>
-        </View>
+        <Text style={styles.cardTitle}>Photo Galleries</Text>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          {SLIDESHOW_GALLERIES.map((gallery, i) => (
+            <TouchableOpacity
+              key={i}
+              style={styles.galleryItem}
+              onPress={() => navigation.navigate('MoreTab', {
+                screen: 'Gallery',
+                params: { title: gallery.title, prefix: gallery.prefix, count: gallery.images },
+              })}
+            >
+              <Image source={{ uri: gallery.thumb }} style={styles.galleryThumb} />
+              <Text style={styles.galleryLabel}>{gallery.title}</Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
       </View>
 
       {/* Social Media */}
@@ -172,20 +212,30 @@ export default function HomeScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#f0ebe3' },
   content: { paddingBottom: 20 },
-  sliderContainer: { position: 'relative', height: 230 },
-  sliderImage: { height: 230, resizeMode: 'cover' },
+  sliderContainer: { position: 'relative', backgroundColor: '#2a1a08' },
   overlay: {
-    position: 'absolute', bottom: 0, left: 0, right: 0,
-    backgroundColor: 'rgba(90,62,27,0.75)', paddingVertical: 12, paddingHorizontal: 15,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(90,62,27,0.85)',
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    gap: 12,
+  },
+  heroLogo: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: '#5a3e1b',
   },
   heroTitle: {
-    fontSize: 22, fontWeight: '800', color: COLORS.textWhite, textAlign: 'center',
+    fontSize: 18, fontWeight: '800', color: COLORS.textWhite,
   },
   heroSubtitle: {
-    fontSize: 14, color: '#d4a853', fontWeight: '600', textAlign: 'center', marginTop: 2,
+    fontSize: 12, color: '#d4a853', fontWeight: '600', marginTop: 1,
   },
   dots: {
-    position: 'absolute', bottom: 62, left: 0, right: 0,
+    position: 'absolute', left: 0, right: 0,
     flexDirection: 'row', justifyContent: 'center', gap: 6,
   },
   dot: { width: 8, height: 8, borderRadius: 4, backgroundColor: 'rgba(255,255,255,0.4)' },
@@ -235,6 +285,11 @@ const styles = StyleSheet.create({
     marginTop: 10, paddingTop: 10, borderTopWidth: 1, borderTopColor: '#f0f0f0',
   },
   viewAllText: { fontSize: 14, fontWeight: '600', color: COLORS.secondary, marginRight: 4 },
+  galleryItem: { marginRight: 12, alignItems: 'center' },
+  galleryThumb: {
+    width: 140, height: 100, borderRadius: 8, backgroundColor: '#ddd',
+  },
+  galleryLabel: { fontSize: 13, fontWeight: '600', color: COLORS.text, marginTop: 6 },
   contactRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 8 },
   contactText: { fontSize: 15, color: COLORS.text, marginLeft: 10 },
   socialRow: {

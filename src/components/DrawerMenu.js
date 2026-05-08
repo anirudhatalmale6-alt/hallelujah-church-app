@@ -68,9 +68,10 @@ export default function DrawerMenu({ visible, onClose, navigation }) {
 
       <Animated.View style={[styles.drawer, { transform: [{ translateX: slideAnim }] }]}>
         <View style={styles.drawerHeader}>
-          <View style={styles.logoCircle}>
-            <Ionicons name="church" size={32} color={COLORS.secondary} />
-          </View>
+          <Image
+            source={{ uri: CHURCH.website + '/picts/home-small-5.jpg' }}
+            style={styles.logoImage}
+          />
           <Text style={styles.drawerTitle}>{CHURCH.name}</Text>
           <Text style={styles.drawerSub}>{CHURCH.tagline}</Text>
         </View>
@@ -149,13 +150,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     alignItems: 'center',
   },
-  logoCircle: {
+  logoImage: {
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: 'rgba(255,255,255,0.15)',
-    justifyContent: 'center',
-    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: 'rgba(255,255,255,0.3)',
+    backgroundColor: '#5a3e1b',
     marginBottom: 10,
   },
   drawerTitle: {

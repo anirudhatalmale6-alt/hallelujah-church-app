@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, CHURCH } from '../constants/theme';
 
@@ -7,9 +7,10 @@ export default function PastorScreen() {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <View style={styles.hero}>
-        <View style={styles.avatarCircle}>
-          <Ionicons name="person" size={50} color={COLORS.textWhite} />
-        </View>
+        <Image
+          source={{ uri: CHURCH.website + '/picts/about-noel.jpg' }}
+          style={styles.pastorPhoto}
+        />
         <Text style={styles.name}>{CHURCH.pastor}</Text>
         <Text style={styles.role}>Senior Pastor</Text>
       </View>
@@ -44,13 +45,13 @@ const styles = StyleSheet.create({
     paddingVertical: 30,
     alignItems: 'center',
   },
-  avatarCircle: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: COLORS.secondary,
-    justifyContent: 'center',
-    alignItems: 'center',
+  pastorPhoto: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    borderWidth: 3,
+    borderColor: COLORS.secondary,
+    backgroundColor: '#5a3e1b',
     marginBottom: 12,
   },
   name: { fontSize: 22, fontWeight: '800', color: COLORS.textWhite },

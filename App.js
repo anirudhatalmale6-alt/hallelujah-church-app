@@ -20,6 +20,7 @@ import PastorScreen from './src/screens/PastorScreen';
 import ContactScreen from './src/screens/ContactScreen';
 import ConnectionScreen from './src/screens/ConnectionScreen';
 import PastSermonsScreen from './src/screens/PastSermonsScreen';
+import GalleryScreen from './src/screens/GalleryScreen';
 
 const DrawerContext = createContext();
 export const useDrawer = () => useContext(DrawerContext);
@@ -54,6 +55,7 @@ function MoreStack() {
       <Stack.Screen name="Contact" component={ContactScreen} options={{ title: 'Contact Us' }} />
       <Stack.Screen name="Connection" component={ConnectionScreen} options={{ title: 'Connection Card' }} />
       <Stack.Screen name="PastSermons" component={PastSermonsScreen} options={{ title: 'Past Sermons' }} />
+      <Stack.Screen name="Gallery" component={GalleryScreen} options={({ route }) => ({ title: route.params?.title || 'Gallery' })} />
     </Stack.Navigator>
   );
 }

@@ -8,8 +8,8 @@ import { COLORS, CHURCH } from '../constants/theme';
 
 export default function LiveScreen() {
   const [showVideo, setShowVideo] = useState(false);
+  const [showYouTube, setShowYouTube] = useState(false);
   const liveUrl = `https://www.youtube.com/embed/live_stream?channel=${CHURCH.youtubeChannelId}&autoplay=1`;
-  const youtubeChannel = CHURCH.youtube;
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
@@ -42,13 +42,24 @@ export default function LiveScreen() {
         <Text style={styles.cardText}>
           You can also watch our live services and past recordings on our YouTube channel.
         </Text>
-        <TouchableOpacity
-          style={styles.ytBtn}
-          onPress={() => Linking.openURL(youtubeChannel)}
-        >
-          <Ionicons name="logo-youtube" size={22} color="#fff" />
-          <Text style={styles.ytBtnText}>Open YouTube Channel</Text>
-        </TouchableOpacity>
+        {showYouTube ? (
+          <View style={styles.videoContainer}>
+            <WebView
+              source={{ uri: `https://www.youtube.com/embed?listType=user_uploads&list=${CHURCH.youtubeChannelId}` }}
+              style={styles.video}
+              javaScriptEnabled
+              allowsInlineMediaPlayback
+            />
+          </View>
+        ) : (
+          <TouchableOpacity
+            style={styles.ytBtn}
+            onPress={() => setShowYouTube(true)}
+          >
+            <Ionicons name="logo-youtube" size={22} color="#fff" />
+            <Text style={styles.ytBtnText}>Browse YouTube Channel</Text>
+          </TouchableOpacity>
+        )}
       </View>
 
       {/* Radio */}
