@@ -21,7 +21,7 @@ export const FONTS = {
 
 export const CHURCH = {
   name: 'Hallelujah In The City',
-  tagline: 'Welcome Home',
+  tagline: 'A House of Love and Healing',
   phone: '(215) 433-5550',
   email: 'info@hallelujahinthecity.org',
   address: '8683 Torresdale Ave, Philadelphia, PA 19136',
