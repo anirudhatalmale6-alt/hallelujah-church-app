@@ -1,0 +1,45 @@
+{
+  "events": [
+    {
+      "id": "1",
+      "title": "Sunday 1st Service",
+      "day": "Every Sunday",
+      "time": "8:00 AM",
+      "icon": "musical-notes",
+      "description": "Join us for praise, worship, and the Word of God."
+    },
+    {
+      "id": "2",
+      "title": "Sunday 2nd Service",
+      "day": "Every Sunday",
+      "time": "11:00 AM",
+      "icon": "musical-notes",
+      "description": "Join us for our second worship service."
+    },
+    {
+      "id": "3",
+      "title": "Tuesday Bible Study",
+      "day": "Every Tuesday",
+      "time": "7:00 PM",
+      "icon": "book",
+      "description": "Deepen your understanding of the Scriptures."
+    },
+    {
+      "id": "4",
+      "title": "Thursday Fasting - Prayer",
+      "day": "Every Thursday",
+      "time": "9:00 AM",
+      "icon": "hand-left",
+      "description": "Come together in fasting and prayer."
+    }
+  ],
+  "specialEvents": [
+    {
+      "id": "s1",
+      "title": "6 Pou 6",
+      "date": "July 5, 2026",
+      "icon": "star",
+      "description": "Special church event. Mark your calendar!"
+    }
+  ]
+}
