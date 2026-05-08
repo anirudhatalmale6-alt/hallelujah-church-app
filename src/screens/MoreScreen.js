@@ -57,7 +57,7 @@ export default function MoreScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f0ebe3' },
+  container: { flex: 1, backgroundColor: COLORS.primary },
   content: { paddingBottom: 20 },
   header: {
     backgroundColor: COLORS.primary,
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
   headerSub: { fontSize: 14, color: 'rgba(255,255,255,0.7)', marginTop: 3 },
   section: { marginTop: 15, marginHorizontal: 15 },
   sectionTitle: {
-    fontSize: 13, fontWeight: '700', color: COLORS.textLight,
+    fontSize: 13, fontWeight: '700', color: '#d4a853',
     textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8, marginLeft: 5,
   },
   menuItem: {
@@ -83,5 +83,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center', alignItems: 'center', marginRight: 12,
   },
   menuLabel: { flex: 1, fontSize: 15, fontWeight: '600', color: COLORS.text },
-  version: { textAlign: 'center', color: COLORS.textLight, fontSize: 12, marginTop: 20 },
+  version: { textAlign: 'center', color: 'rgba(255,255,255,0.5)', fontSize: 12, marginTop: 20 },
 });

@@ -238,7 +238,7 @@ export default function ConnectionScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f0ebe3' },
+  container: { flex: 1, backgroundColor: COLORS.primary },
   content: { paddingBottom: 20 },
   headerSection: { backgroundColor: COLORS.primary, paddingVertical: 25, paddingHorizontal: 20, alignItems: 'center' },
   title: { fontSize: 24, fontWeight: '800', color: COLORS.textWhite, marginTop: 8 },
@@ -292,9 +292,9 @@ const styles = StyleSheet.create({
   },
   btnDisabled: { opacity: 0.6 },
   submitText: { color: '#fff', fontWeight: '700', fontSize: 16 },
-  successContainer: { flex: 1, backgroundColor: '#f0ebe3', justifyContent: 'center', alignItems: 'center', padding: 30 },
-  successTitle: { fontSize: 22, fontWeight: '800', color: COLORS.primary, marginTop: 15 },
-  successText: { fontSize: 15, color: COLORS.textLight, textAlign: 'center', marginTop: 10, lineHeight: 22 },
+  successContainer: { flex: 1, backgroundColor: COLORS.primary, justifyContent: 'center', alignItems: 'center', padding: 30 },
+  successTitle: { fontSize: 22, fontWeight: '800', color: COLORS.textWhite, marginTop: 15 },
+  successText: { fontSize: 15, color: 'rgba(255,255,255,0.8)', textAlign: 'center', marginTop: 10, lineHeight: 22 },
   newBtn: { marginTop: 20, paddingHorizontal: 25, paddingVertical: 12, backgroundColor: COLORS.primary, borderRadius: 8 },
   newBtnText: { color: '#fff', fontWeight: '700', fontSize: 15 },
 });

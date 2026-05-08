@@ -38,7 +38,7 @@ export default function PastorScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f0ebe3' },
+  container: { flex: 1, backgroundColor: COLORS.primary },
   content: { paddingBottom: 20 },
   hero: {
     backgroundColor: COLORS.primary,

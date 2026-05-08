@@ -114,10 +114,10 @@ export default function EventsScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f0ebe3' },
+  container: { flex: 1, backgroundColor: COLORS.primary },
   content: { padding: 15, paddingBottom: 20 },
-  header: { fontSize: 22, fontWeight: '800', color: COLORS.primary, marginBottom: 5 },
-  subHeader: { fontSize: 14, color: COLORS.textLight, marginBottom: 15 },
+  header: { fontSize: 22, fontWeight: '800', color: COLORS.textWhite, marginBottom: 5 },
+  subHeader: { fontSize: 14, color: 'rgba(255,255,255,0.7)', marginBottom: 15 },
   card: {
     flexDirection: 'row',
     backgroundColor: '#fff',

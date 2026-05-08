@@ -53,7 +53,7 @@ export default function RadioScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f0ebe3' },
+  container: { flex: 1, backgroundColor: COLORS.primary },
   content: { padding: 15 },
   radioCard: {
     backgroundColor: '#fff',

@@ -158,7 +158,7 @@ export default function PastSermonsScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f0ebe3' },
+  container: { flex: 1, backgroundColor: COLORS.primary },
   list: { paddingBottom: 20 },
   sectionHeader: {
     flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff',

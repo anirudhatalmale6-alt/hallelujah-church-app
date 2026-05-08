@@ -54,7 +54,7 @@ export default function GalleryScreen({ route }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f0ebe3' },
+  container: { flex: 1, backgroundColor: COLORS.primary },
   grid: { padding: 10 },
   gridImage: {
     borderRadius: 8,

@@ -129,7 +129,7 @@ export default function PrayerScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f0ebe3' },
+  container: { flex: 1, backgroundColor: COLORS.primary },
   content: { paddingBottom: 20 },
   headerSection: {
     backgroundColor: COLORS.primary,
@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
   },
   successContainer: {
     flex: 1,
-    backgroundColor: '#f0ebe3',
+    backgroundColor: COLORS.primary,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 30,

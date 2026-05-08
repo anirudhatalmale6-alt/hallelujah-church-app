@@ -198,7 +198,7 @@ export default function HomeScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f0ebe3' },
+  container: { flex: 1, backgroundColor: COLORS.primary },
   content: { paddingBottom: 20 },
   sliderContainer: { position: 'relative', backgroundColor: '#2a1a08' },
   dots: {

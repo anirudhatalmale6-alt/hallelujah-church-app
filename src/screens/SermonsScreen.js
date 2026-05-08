@@ -184,17 +184,17 @@ export default function SermonsScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f0ebe3' },
+  container: { flex: 1, backgroundColor: COLORS.primary },
   list: { padding: 15, paddingBottom: 20 },
   header: {
     fontSize: 20,
     fontWeight: '700',
-    color: COLORS.primary,
+    color: COLORS.textWhite,
     marginBottom: 15,
   },
   center: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20 },
-  loadingText: { marginTop: 10, fontSize: 15, color: COLORS.textLight },
-  errorText: { marginTop: 10, fontSize: 15, color: COLORS.textLight, textAlign: 'center' },
+  loadingText: { marginTop: 10, fontSize: 15, color: 'rgba(255,255,255,0.7)' },
+  errorText: { marginTop: 10, fontSize: 15, color: 'rgba(255,255,255,0.7)', textAlign: 'center' },
   retryBtn: {
     marginTop: 15,
     paddingHorizontal: 25,
@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   retryText: { color: '#fff', fontWeight: '700' },
-  emptyText: { fontSize: 15, color: COLORS.textLight },
+  emptyText: { fontSize: 15, color: 'rgba(255,255,255,0.7)' },
   videoCard: {
     backgroundColor: '#fff',
     borderRadius: 10,
