@@ -8,7 +8,7 @@ import { COLORS, CHURCH } from '../constants/theme';
 
 const PLAYER_HTML = `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><style>*{margin:0;padding:0}body{background:#5a3e1b;display:flex;justify-content:center;align-items:center;min-height:100vh}audio{width:90%}</style></head><body><audio controls src="https://s2.voscast.com:8562/stream" style="width:90%"></audio></body></html>`;
 
-export default function RadioScreen() {
+export default function RadioScreen({ navigation }) {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <View style={styles.radioCard}>
@@ -40,7 +40,7 @@ export default function RadioScreen() {
         </Text>
         <TouchableOpacity
           style={styles.giveBtn}
-          onPress={() => Linking.openURL(CHURCH.donationUrl)}
+          onPress={() => navigation.getParent()?.navigate('Give')}
         >
           <Ionicons name="heart" size={22} color="#fff" />
           <Text style={styles.giveBtnText}>Give / Donate</Text>

@@ -52,7 +52,7 @@ export default function DrawerMenu({ visible, onClose, navigation }) {
   const navigateTo = (tab, screen) => {
     onClose();
     if (screen) {
-      navigation.navigate(tab, { screen });
+      navigation.navigate(tab, { screen, initial: false });
     } else {
       navigation.navigate(tab);
     }

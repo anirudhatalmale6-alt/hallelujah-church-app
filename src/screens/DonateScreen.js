@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import {
-  View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Alert, Linking,
+  View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Alert, Linking, Modal,
 } from 'react-native';
+import { WebView } from 'react-native-webview';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, CHURCH } from '../constants/theme';
 
@@ -21,6 +22,7 @@ export default function DonateScreen() {
   const [donorName, setDonorName] = useState('');
   const [donorEmail, setDonorEmail] = useState('');
   const [activePreset, setActivePreset] = useState(null);
+  const [showWebDonation, setShowWebDonation] = useState(false);
 
   const setAmount = (key, value) => {
     setAmounts(prev => ({ ...prev, [key]: value }));
@@ -36,29 +38,7 @@ export default function DonateScreen() {
   };
 
   const handleStripeCheckout = () => {
-    const total = getTotal();
-    if (total < 1) {
-      Alert.alert('Error', 'Please enter a donation amount of at least $1.00 in one or more categories.');
-      return;
-    }
-    if ((parseFloat(amounts.other) || 0) > 0 && !otherSpecify.trim()) {
-      Alert.alert('Error', 'Please specify what your "Other" donation is for.');
-      return;
-    }
-
-    // Build form data for the server
-    const params = new URLSearchParams();
-    params.append('amount_tithes', amounts.tithes || '0');
-    params.append('amount_offering', amounts.offering || '0');
-    params.append('amount_building', amounts.building || '0');
-    params.append('amount_events', amounts.events || '0');
-    params.append('amount_other', amounts.other || '0');
-    params.append('other_specify', otherSpecify);
-    params.append('donor_name', donorName || 'Anonymous');
-    params.append('donor_email', donorEmail);
-
-    // Open the church website checkout in browser
-    Linking.openURL(CHURCH.donationUrl);
+    setShowWebDonation(true);
   };
 
   const handlePayPal = () => {
@@ -179,6 +159,23 @@ export default function DonateScreen() {
       </Text>
 
       <View style={{ height: 20 }} />
+
+      <Modal visible={showWebDonation} animationType="slide" onRequestClose={() => setShowWebDonation(false)}>
+        <View style={{ flex: 1, backgroundColor: '#000' }}>
+          <View style={styles.modalHeader}>
+            <TouchableOpacity onPress={() => setShowWebDonation(false)} style={styles.closeBtn}>
+              <Ionicons name="close" size={28} color={COLORS.textWhite} />
+            </TouchableOpacity>
+            <Text style={styles.modalTitle}>Donate Online</Text>
+          </View>
+          <WebView
+            source={{ uri: CHURCH.donationUrl }}
+            style={{ flex: 1 }}
+            javaScriptEnabled
+            setSupportMultipleWindows={false}
+          />
+        </View>
+      </Modal>
     </ScrollView>
   );
 }
@@ -310,4 +307,14 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     lineHeight: 19,
   },
+  modalHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: COLORS.primary,
+    paddingTop: 50,
+    paddingBottom: 12,
+    paddingHorizontal: 15,
+  },
+  closeBtn: { marginRight: 12 },
+  modalTitle: { flex: 1, color: COLORS.textWhite, fontSize: 16, fontWeight: '600' },
 });

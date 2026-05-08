@@ -48,6 +48,16 @@ function HeaderTitle() {
   );
 }
 
+function HeaderLogo() {
+  return (
+    <Image
+      source={require('./assets/hc-logo-small.png')}
+      style={{ width: 32, height: 32, borderRadius: 16 }}
+      resizeMode="contain"
+    />
+  );
+}
+
 function MoreStack() {
   return (
     <Stack.Navigator

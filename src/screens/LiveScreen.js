@@ -6,7 +6,7 @@ import { WebView } from 'react-native-webview';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, CHURCH } from '../constants/theme';
 
-export default function LiveScreen() {
+export default function LiveScreen({ navigation }) {
   const [showVideo, setShowVideo] = useState(false);
   const liveUrl = `https://www.youtube.com/embed/live_stream?channel=${CHURCH.youtubeChannelId}&autoplay=1`;
 
@@ -49,7 +49,7 @@ export default function LiveScreen() {
         </Text>
         <TouchableOpacity
           style={styles.giveBtn}
-          onPress={() => Linking.openURL(CHURCH.donationUrl)}
+          onPress={() => navigation.navigate('Give')}
         >
           <Ionicons name="heart" size={22} color="#fff" />
           <Text style={styles.giveBtnText}>Give / Donate</Text>
