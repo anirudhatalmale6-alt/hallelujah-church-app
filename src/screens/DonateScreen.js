@@ -1,120 +1,43 @@
 import React, { useState } from 'react';
 import {
-  View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Alert, Linking, Modal,
+  View, Text, StyleSheet, ScrollView, TouchableOpacity, Linking, ActivityIndicator,
 } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, CHURCH } from '../constants/theme';
 
-const CATEGORIES = [
-  { key: 'tithes', label: 'Tithes' },
-  { key: 'offering', label: 'General Offering' },
-  { key: 'building', label: 'Building Fund' },
-  { key: 'events', label: 'Special Events' },
-  { key: 'other', label: 'Other' },
-];
-
-const PRESETS = [25, 50, 100, 250, 500];
-
 export default function DonateScreen() {
-  const [amounts, setAmounts] = useState({});
-  const [otherSpecify, setOtherSpecify] = useState('');
-  const [donorName, setDonorName] = useState('');
-  const [donorEmail, setDonorEmail] = useState('');
-  const [activePreset, setActivePreset] = useState(null);
-  const [showWebDonation, setShowWebDonation] = useState(false);
-
-  const setAmount = (key, value) => {
-    setAmounts(prev => ({ ...prev, [key]: value }));
-  };
-
-  const selectPreset = (val) => {
-    setActivePreset(val);
-    setAmounts(prev => ({ ...prev, offering: String(val) }));
-  };
-
-  const getTotal = () => {
-    return Object.values(amounts).reduce((sum, val) => sum + (parseFloat(val) || 0), 0);
-  };
-
-  const handleStripeCheckout = () => {
-    setShowWebDonation(true);
-  };
-
-  const handlePayPal = () => {
-    Linking.openURL(`https://www.paypal.com/donate?hosted_button_id=${CHURCH.paypalButtonId}`);
-  };
+  const [loading, setLoading] = useState(true);
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      {/* Stripe / Card Section */}
+    <ScrollView style={styles.container} contentContainerStyle={styles.content} nestedScrollEnabled>
+      {/* Donation Page (In-App) */}
       <View style={styles.card}>
         <Text style={styles.cardTitle}>Give with Credit or Debit Card</Text>
-        <Text style={styles.note}>Enter an amount for each category you would like to give to.</Text>
-
-        {CATEGORIES.map((cat) => (
-          <View key={cat.key} style={styles.catRow}>
-            <Text style={styles.catLabel}>{cat.label}</Text>
-            {cat.key === 'offering' && (
-              <View style={styles.presets}>
-                {PRESETS.map(val => (
-                  <TouchableOpacity
-                    key={val}
-                    style={[styles.presetBtn, activePreset === val && styles.presetActive]}
-                    onPress={() => selectPreset(val)}
-                  >
-                    <Text style={[styles.presetText, activePreset === val && styles.presetTextActive]}>
-                      ${val}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            )}
-            <TextInput
-              style={styles.amountInput}
-              placeholder="0.00"
-              keyboardType="decimal-pad"
-              value={amounts[cat.key] || ''}
-              onChangeText={(val) => {
-                setAmount(cat.key, val);
-                if (cat.key === 'offering') setActivePreset(null);
-              }}
-            />
-            {cat.key === 'other' && (parseFloat(amounts.other) || 0) > 0 && (
-              <TextInput
-                style={styles.specifyInput}
-                placeholder="Please specify..."
-                value={otherSpecify}
-                onChangeText={setOtherSpecify}
-              />
-            )}
-          </View>
-        ))}
-
-        <View style={styles.totalRow}>
-          <Text style={styles.totalLabel}>TOTAL</Text>
-          <Text style={styles.totalAmount}>${getTotal().toFixed(2)}</Text>
+        <View style={styles.webViewContainer}>
+          {loading && (
+            <View style={styles.loadingOverlay}>
+              <ActivityIndicator size="large" color={COLORS.secondary} />
+              <Text style={styles.loadingText}>Loading donation form...</Text>
+            </View>
+          )}
+          <WebView
+            source={{ uri: CHURCH.donationUrl }}
+            style={styles.webView}
+            javaScriptEnabled
+            domStorageEnabled
+            setSupportMultipleWindows={false}
+            nestedScrollEnabled
+            onLoadEnd={() => setLoading(false)}
+            onShouldStartLoadWithRequest={(request) => {
+              if (request.url.includes('hallelujahinthecity.org') || request.url.includes('stripe.com') || request.url.includes('js.stripe.com')) {
+                return true;
+              }
+              Linking.openURL(request.url);
+              return false;
+            }}
+          />
         </View>
-
-        <TextInput
-          style={styles.input}
-          placeholder="Your Name (optional)"
-          value={donorName}
-          onChangeText={setDonorName}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Your Email (optional - for receipt)"
-          keyboardType="email-address"
-          autoCapitalize="none"
-          value={donorEmail}
-          onChangeText={setDonorEmail}
-        />
-
-        <TouchableOpacity style={styles.stripeBtn} onPress={handleStripeCheckout}>
-          <Ionicons name="card-outline" size={20} color="#fff" />
-          <Text style={styles.stripeBtnText}>Donate with Card</Text>
-        </TouchableOpacity>
       </View>
 
       {/* Divider */}
@@ -123,7 +46,7 @@ export default function DonateScreen() {
       {/* PayPal */}
       <View style={styles.card}>
         <Text style={styles.cardTitle}>Give with PayPal</Text>
-        <TouchableOpacity style={styles.paypalBtn} onPress={handlePayPal}>
+        <TouchableOpacity style={styles.paypalBtn} onPress={() => Linking.openURL(`https://www.paypal.com/donate?hosted_button_id=${CHURCH.paypalButtonId}`)}>
           <Ionicons name="logo-paypal" size={22} color="#fff" />
           <Text style={styles.paypalBtnText}>Donate with PayPal</Text>
         </TouchableOpacity>
@@ -154,28 +77,10 @@ export default function DonateScreen() {
       <Text style={styles.secureNote}>
         All transactions are secure and encrypted.{'\n'}
         Hallelujah In The City is a registered nonprofit organization.{'\n\n'}
-        For gifts of $10,000 or more, please contact us directly at {CHURCH.phone} to arrange a bank wire transfer.{'\n\n'}
-        Thank you for your support.
+        Thank you for your generous support.
       </Text>
 
       <View style={{ height: 20 }} />
-
-      <Modal visible={showWebDonation} animationType="slide" onRequestClose={() => setShowWebDonation(false)}>
-        <View style={{ flex: 1, backgroundColor: '#000' }}>
-          <View style={styles.modalHeader}>
-            <TouchableOpacity onPress={() => setShowWebDonation(false)} style={styles.closeBtn}>
-              <Ionicons name="close" size={28} color={COLORS.textWhite} />
-            </TouchableOpacity>
-            <Text style={styles.modalTitle}>Donate Online</Text>
-          </View>
-          <WebView
-            source={{ uri: CHURCH.donationUrl }}
-            style={{ flex: 1 }}
-            javaScriptEnabled
-            setSupportMultipleWindows={false}
-          />
-        </View>
-      </Modal>
     </ScrollView>
   );
 }
@@ -204,79 +109,22 @@ const styles = StyleSheet.create({
     borderBottomColor: COLORS.secondary,
     paddingBottom: 8,
   },
-  note: {
-    fontSize: 13,
-    color: COLORS.textLight,
-    fontStyle: 'italic',
-    marginBottom: 12,
-  },
-  catRow: { marginBottom: 14 },
-  catLabel: { fontSize: 15, fontWeight: '600', color: COLORS.text, marginBottom: 4 },
-  presets: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 6,
-    marginBottom: 6,
-  },
-  presetBtn: {
-    paddingHorizontal: 14,
-    paddingVertical: 6,
-    borderWidth: 2,
-    borderColor: COLORS.secondary,
-    borderRadius: 5,
-    backgroundColor: '#fff',
-  },
-  presetActive: { backgroundColor: COLORS.secondary },
-  presetText: { fontSize: 14, fontWeight: '600', color: COLORS.primary },
-  presetTextActive: { color: '#fff' },
-  amountInput: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    padding: 10,
-    fontSize: 15,
-    backgroundColor: '#fff',
-  },
-  specifyInput: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    padding: 10,
-    fontSize: 14,
-    backgroundColor: '#fff',
-    marginTop: 6,
-  },
-  totalRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    borderTopWidth: 2,
-    borderTopColor: COLORS.secondary,
-    paddingTop: 12,
-    marginBottom: 15,
-  },
-  totalLabel: { fontSize: 18, fontWeight: '700', color: COLORS.primary },
-  totalAmount: { fontSize: 22, fontWeight: '800', color: COLORS.primary },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    padding: 10,
-    fontSize: 15,
-    marginBottom: 10,
-    backgroundColor: '#fff',
-  },
-  stripeBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: COLORS.primary,
-    paddingVertical: 14,
+  webViewContainer: {
+    height: 500,
     borderRadius: 8,
-    gap: 8,
-    marginTop: 5,
+    overflow: 'hidden',
+    backgroundColor: '#f9f9f9',
   },
-  stripeBtnText: { color: '#fff', fontWeight: '700', fontSize: 16 },
+  webView: { flex: 1 },
+  loadingOverlay: {
+    position: 'absolute',
+    top: 0, left: 0, right: 0, bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f9f9f9',
+    zIndex: 1,
+  },
+  loadingText: { marginTop: 10, fontSize: 14, color: COLORS.textLight },
   divider: { alignItems: 'center', marginVertical: 10 },
   dividerText: { fontSize: 15, fontWeight: '600', color: COLORS.textLight },
   paypalBtn: {
@@ -307,14 +155,4 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     lineHeight: 19,
   },
-  modalHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: COLORS.primary,
-    paddingTop: 50,
-    paddingBottom: 12,
-    paddingHorizontal: 15,
-  },
-  closeBtn: { marginRight: 12 },
-  modalTitle: { flex: 1, color: COLORS.textWhite, fontSize: 16, fontWeight: '600' },
 });
