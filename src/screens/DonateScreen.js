@@ -37,6 +37,8 @@ export default function DonateScreen() {
     return Object.values(amounts).reduce((sum, val) => sum + (parseFloat(val) || 0), 0);
   };
 
+  const [checkoutHtml, setCheckoutHtml] = useState('');
+
   const handleStripeCheckout = () => {
     const total = getTotal();
     if (total < 1) {
@@ -47,6 +49,8 @@ export default function DonateScreen() {
       Alert.alert('Error', 'Please specify what your "Other" donation is for.');
       return;
     }
+    const html = `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"></head><body onload="document.forms[0].submit()"><p style="text-align:center;margin-top:40%;font-family:sans-serif;color:#5a3e1b">Processing your donation...</p><form method="POST" action="${CHURCH.stripeCheckoutUrl}"><input type="hidden" name="amount_tithes" value="${amounts.tithes || '0'}"><input type="hidden" name="amount_offering" value="${amounts.offering || '0'}"><input type="hidden" name="amount_building" value="${amounts.building || '0'}"><input type="hidden" name="amount_events" value="${amounts.events || '0'}"><input type="hidden" name="amount_other" value="${amounts.other || '0'}"><input type="hidden" name="other_specify" value="${otherSpecify}"><input type="hidden" name="donor_name" value="${donorName || 'Anonymous'}"><input type="hidden" name="donor_email" value="${donorEmail}"></form></body></html>`;
+    setCheckoutHtml(html);
     setShowCheckout(true);
   };
 
@@ -178,20 +182,12 @@ export default function DonateScreen() {
             <Text style={styles.modalTitle}>Complete Donation</Text>
           </View>
           <WebView
-            source={{ uri: CHURCH.donationUrl }}
+            source={{ html: checkoutHtml }}
             style={{ flex: 1 }}
             javaScriptEnabled
             domStorageEnabled
             setSupportMultipleWindows={false}
-            onShouldStartLoadWithRequest={(request) => {
-              if (request.url.includes('hallelujahinthecity.org') ||
-                  request.url.includes('stripe.com') ||
-                  request.url.includes('js.stripe.com') ||
-                  request.url.includes('checkout.stripe.com')) {
-                return true;
-              }
-              return true;
-            }}
+            originWhitelist={['*']}
           />
         </View>
       </Modal>
