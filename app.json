@@ -21,7 +21,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#5a3e1b"
       },
-      "package": "org.hallelujahinthecity.app",
+      "package": "com.hallelujahinthecity.app",
       "versionCode": 6
     },
     "scheme": "hallelujah"
