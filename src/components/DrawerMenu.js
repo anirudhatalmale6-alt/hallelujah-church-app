@@ -1,10 +1,12 @@
 import React, { useRef, useEffect } from 'react';
 import {
   View, Text, StyleSheet, TouchableOpacity, Animated, Dimensions,
-  TouchableWithoutFeedback, Image, Linking, ScrollView,
+  TouchableWithoutFeedback, Image, Linking, ScrollView, Share,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, CHURCH } from '../constants/theme';
+
+const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=org.hallelujahinthecity.app';
 
 const DRAWER_WIDTH = Dimensions.get('window').width * 0.8;
 
@@ -101,6 +103,10 @@ export default function DrawerMenu({ visible, onClose, navigation }) {
           <DrawerItem icon="logo-facebook" label="Facebook" color="#1877F2" onPress={() => { onClose(); Linking.openURL(CHURCH.facebook); }} />
           <DrawerItem icon="logo-youtube" label="YouTube" color="#FF0000" onPress={() => { onClose(); Linking.openURL(CHURCH.youtube); }} />
           <DrawerItem icon="globe" label="Website" color={COLORS.primary} onPress={() => { onClose(); Linking.openURL(CHURCH.website); }} />
+
+          <View style={styles.divider} />
+
+          <DrawerItem icon="share-social" label="Share This App" color="#8b6914" onPress={() => { onClose(); Share.share({ message: `Download the ${CHURCH.name} app - ${CHURCH.tagline}\n${PLAY_STORE_URL}` }); }} />
 
           <View style={{ height: 30 }} />
         </ScrollView>
