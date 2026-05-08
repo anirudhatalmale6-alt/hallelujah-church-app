@@ -134,11 +134,16 @@ export default function PastSermonsScreen() {
           </View>
           {playingVideo && (
             <WebView
-              source={{ uri: `https://www.youtube.com/embed/${playingVideo.videoId}?autoplay=1&rel=0` }}
+              source={{ uri: `https://www.youtube.com/embed/${playingVideo.videoId}?autoplay=1&rel=0&playsinline=1` }}
               style={styles.player}
               javaScriptEnabled
               allowsInlineMediaPlayback
               mediaPlaybackRequiresUserAction={false}
+              setSupportMultipleWindows={false}
+              onShouldStartLoadWithRequest={(request) => {
+                if (request.url.includes('youtube.com/embed') || request.url.includes('youtube.com/watch')) return true;
+                return false;
+              }}
             />
           )}
           <View style={styles.playerInfo}>

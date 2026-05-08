@@ -81,7 +81,7 @@ export default function HomeScreen({ navigation }) {
         />
         <View style={styles.overlay}>
           <Image
-            source={{ uri: CHURCH.website + '/picts/home-small-5.jpg' }}
+            source={require('../../assets/hc-logo-small.png')}
             style={styles.heroLogo}
           />
           <View>

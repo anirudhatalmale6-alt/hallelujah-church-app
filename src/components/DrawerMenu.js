@@ -69,7 +69,7 @@ export default function DrawerMenu({ visible, onClose, navigation }) {
       <Animated.View style={[styles.drawer, { transform: [{ translateX: slideAnim }] }]}>
         <View style={styles.drawerHeader}>
           <Image
-            source={{ uri: CHURCH.website + '/picts/home-small-5.jpg' }}
+            source={require('../../assets/hc-logo-small.png')}
             style={styles.logoImage}
           />
           <Text style={styles.drawerTitle}>{CHURCH.name}</Text>

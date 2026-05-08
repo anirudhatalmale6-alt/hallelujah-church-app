@@ -7,16 +7,54 @@ import { WebView } from 'react-native-webview';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, CHURCH } from '../constants/theme';
 
+const ALL_SERMONS = [
+  { id: 'o1N0TXOf65M', title: 'Worship Service #25', date: '' },
+  { id: 'w7v5FvCZJGA', title: 'Worship Service #24', date: '' },
+  { id: 'OC-xrGa0L6I', title: 'Worship Service #23', date: '' },
+  { id: 'tVHyenGGMHw', title: 'Worship Service #22', date: '' },
+  { id: 'YsmhHHZCAzU', title: 'Worship Service #21', date: '' },
+  { id: 'Cio2xrYpmIY', title: 'Worship Service #20', date: '' },
+  { id: 'w2P3Z3kfnhw', title: 'Worship Service #19', date: '' },
+  { id: 'Yk5LPT2c6Ww', title: 'Worship Service #18', date: '' },
+  { id: 'pE8c5TG3Dlg', title: 'Worship Service #17', date: '' },
+  { id: 'WNxTpMzsLKE', title: 'Worship Service #16', date: '' },
+  { id: '_3dw-lkBci4', title: 'Worship Service #15', date: '' },
+  { id: 'AUPCn7rPmkE', title: 'Worship Service #14', date: '' },
+  { id: 'uKNL6OF4OJM', title: 'Worship Service #13', date: '' },
+  { id: 'SjWtCIGkwjU', title: 'Worship Service #12', date: '' },
+  { id: 'Fxbe7j6tPgM', title: 'Worship Service #11', date: '' },
+  { id: 'fAX0UNp2w7E', title: 'Worship Service #10', date: '' },
+  { id: '5u5L-9PBBMA', title: 'Worship Service #9', date: '' },
+  { id: 'a2vCfn4ysYM', title: 'Worship Service #8', date: '' },
+  { id: 'p-CFKV0rWQw', title: 'Worship Service #7', date: '' },
+  { id: '_tRbKPwehYs', title: 'Worship Service #6', date: '' },
+  { id: 'cIbJXJaFxuM', title: 'Worship Service #5', date: '' },
+  { id: 'bnBqBTqCKhI', title: 'Worship Service #4', date: '' },
+  { id: '18JY3E_QWFE', title: 'Worship Service #3', date: '' },
+  { id: 'p8JqC1m2ADo', title: 'Worship Service #2', date: '' },
+  { id: '5s6SjhXcO0A', title: 'Worship Service #1', date: '' },
+  { id: 'bBY-tfHTO7g', title: 'Address to the Nation #2', date: '' },
+  { id: 'Mb3F2nD1vxo', title: 'Address to the Nation #1', date: '' },
+  { id: 'jibKq6sQzLk', title: 'Prayer for the Nation #5', date: '' },
+  { id: 'KLcLw_WqCts', title: 'Prayer for the Nation #4', date: '' },
+  { id: 'YlfMskOhBfc', title: 'Prayer for the Nation #3', date: '' },
+  { id: 'hHmjoZNHrFg', title: 'Prayer for the Nation #2', date: '' },
+  { id: 'uv8o_rGSbw0', title: 'Prayer for the Nation #1', date: '' },
+  { id: 'PMSrZ8J_xYA', title: 'Worship by Dr. Victoria Noel', date: '' },
+  { id: '5QjZUtfPoMs', title: 'Worship by Pasteur Noel #3', date: '' },
+  { id: 'ZS3YS5Q7qJ0', title: 'Worship by Pasteur Noel #2', date: '' },
+  { id: 'gTUZ4foHb98', title: 'Worship by Pasteur Noel #1', date: '' },
+  { id: 'DYaV4B0SB0g', title: 'Bouyon Cho Show - Family Presentation', date: '' },
+].map(v => ({ ...v, thumbnail: `https://i.ytimg.com/vi/${v.id}/mqdefault.jpg` }));
+
 export default function SermonsScreen() {
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [error, setError] = useState(null);
   const [playingVideo, setPlayingVideo] = useState(null);
 
   const fetchVideos = async () => {
     try {
-      setError(null);
       const rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${CHURCH.youtubeChannelId}`;
       const response = await fetch(rssUrl);
       const text = await response.text();
@@ -40,9 +78,13 @@ export default function SermonsScreen() {
           });
         }
       }
-      setVideos(entries);
+      if (entries.length > 0) {
+        setVideos(entries);
+      } else {
+        setVideos(ALL_SERMONS);
+      }
     } catch (err) {
-      setError('Unable to load sermons. Please check your connection.');
+      setVideos(ALL_SERMONS);
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -71,18 +113,6 @@ export default function SermonsScreen() {
       <View style={styles.center}>
         <ActivityIndicator size="large" color={COLORS.secondary} />
         <Text style={styles.loadingText}>Loading sermons...</Text>
-      </View>
-    );
-  }
-
-  if (error) {
-    return (
-      <View style={styles.center}>
-        <Ionicons name="cloud-offline-outline" size={50} color={COLORS.textLight} />
-        <Text style={styles.errorText}>{error}</Text>
-        <TouchableOpacity style={styles.retryBtn} onPress={() => { setLoading(true); fetchVideos(); }}>
-          <Text style={styles.retryText}>Retry</Text>
-        </TouchableOpacity>
       </View>
     );
   }
@@ -119,11 +149,16 @@ export default function SermonsScreen() {
           </View>
           {playingVideo && (
             <WebView
-              source={{ uri: `https://www.youtube.com/embed/${playingVideo.id}?autoplay=1&rel=0` }}
+              source={{ uri: `https://www.youtube.com/embed/${playingVideo.id}?autoplay=1&rel=0&playsinline=1` }}
               style={styles.player}
               javaScriptEnabled
               allowsInlineMediaPlayback
               mediaPlaybackRequiresUserAction={false}
+              setSupportMultipleWindows={false}
+              onShouldStartLoadWithRequest={(request) => {
+                if (request.url.includes('youtube.com/embed') || request.url.includes('youtube.com/watch')) return true;
+                return false;
+              }}
             />
           )}
           <View style={styles.playerInfo}>

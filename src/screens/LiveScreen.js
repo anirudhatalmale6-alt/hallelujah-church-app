@@ -27,6 +27,11 @@ export default function LiveScreen() {
               javaScriptEnabled
               allowsInlineMediaPlayback
               mediaPlaybackRequiresUserAction={false}
+              setSupportMultipleWindows={false}
+              onShouldStartLoadWithRequest={(request) => {
+                if (request.url.includes('youtube.com')) return true;
+                return false;
+              }}
             />
           </View>
         ) : (
@@ -49,6 +54,11 @@ export default function LiveScreen() {
               style={styles.video}
               javaScriptEnabled
               allowsInlineMediaPlayback
+              setSupportMultipleWindows={false}
+              onShouldStartLoadWithRequest={(request) => {
+                if (request.url.includes('youtube.com')) return true;
+                return false;
+              }}
             />
           </View>
         ) : (
