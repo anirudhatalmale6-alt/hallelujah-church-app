@@ -2,7 +2,7 @@
   "expo": {
     "name": "Hallelujah In The City",
     "slug": "hallelujah-in-the-city",
-    "version": "2.4.0",
+    "version": "2.4.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -14,7 +14,14 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "org.hallelujahinthecity.app"
+      "bundleIdentifier": "org.hallelujahinthecity.app",
+      "buildNumber": "3",
+      "infoPlist": {
+        "NSAppTransportSecurity": {
+          "NSAllowsArbitraryLoads": true
+        },
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -22,8 +29,14 @@
         "backgroundColor": "#5a3e1b"
       },
       "package": "com.hallelujahinthecity.app",
-      "versionCode": 6
+      "versionCode": 7
     },
-    "scheme": "hallelujah"
+    "scheme": "hallelujah",
+    "extra": {
+      "eas": {
+        "projectId": "c49b2bc5-1008-4d24-914e-96ccd38655fd"
+      }
+    },
+    "owner": "arialtravel"
   }
 }

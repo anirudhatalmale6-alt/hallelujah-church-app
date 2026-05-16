@@ -1,125 +1,103 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
-  View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Modal,
-  SectionList,
+  View, Text, StyleSheet, TouchableOpacity, Image, Modal,
+  FlatList, ActivityIndicator,
 } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../constants/theme';
 
-const SERMON_CATEGORIES = [
-  {
-    title: 'Worship Services & Sermons',
-    icon: 'book',
-    data: [
-      { id: 'N0025', title: 'Worship Service #25', videoId: 'o1N0TXOf65M' },
-      { id: 'N0024', title: 'Worship Service #24', videoId: 'w7v5FvCZJGA' },
-      { id: 'N0023', title: 'Worship Service #23', videoId: 'OC-xrGa0L6I' },
-      { id: 'N0022', title: 'Worship Service #22', videoId: 'tVHyenGGMHw' },
-      { id: 'N0021', title: 'Worship Service #21', videoId: 'YsmhHHZCAzU' },
-      { id: 'N0020', title: 'Worship Service #20', videoId: 'Cio2xrYpmIY' },
-      { id: 'N0019', title: 'Worship Service #19', videoId: 'w2P3Z3kfnhw' },
-      { id: 'N0018', title: 'Worship Service #18', videoId: 'Yk5LPT2c6Ww' },
-      { id: 'N0017', title: 'Worship Service #17', videoId: 'pE8c5TG3Dlg' },
-      { id: 'N0016', title: 'Worship Service #16', videoId: 'WNxTpMzsLKE' },
-      { id: 'N0015', title: 'Worship Service #15', videoId: '_3dw-lkBci4' },
-      { id: 'N0014', title: 'Worship Service #14', videoId: 'AUPCn7rPmkE' },
-      { id: 'N0013', title: 'Worship Service #13', videoId: 'uKNL6OF4OJM' },
-      { id: 'N0012', title: 'Worship Service #12', videoId: 'SjWtCIGkwjU' },
-      { id: 'N0011', title: 'Worship Service #11', videoId: 'Fxbe7j6tPgM' },
-      { id: 'N0010', title: 'Worship Service #10', videoId: 'fAX0UNp2w7E' },
-      { id: 'N0009', title: 'Worship Service #9', videoId: '5u5L-9PBBMA' },
-      { id: 'N0008', title: 'Worship Service #8', videoId: 'a2vCfn4ysYM' },
-      { id: 'N0007', title: 'Worship Service #7', videoId: 'p-CFKV0rWQw' },
-      { id: 'N0006', title: 'Worship Service #6', videoId: '_tRbKPwehYs' },
-      { id: 'N0005', title: 'Worship Service #5', videoId: 'cIbJXJaFxuM' },
-      { id: 'N0004', title: 'Worship Service #4', videoId: 'bnBqBTqCKhI' },
-      { id: 'N0003', title: 'Worship Service #3', videoId: '18JY3E_QWFE' },
-      { id: 'N0002', title: 'Worship Service #2', videoId: 'p8JqC1m2ADo' },
-      { id: 'N0001', title: 'Worship Service #1', videoId: '5s6SjhXcO0A' },
-    ],
-  },
-  {
-    title: 'Adresse a la Nation',
-    icon: 'megaphone',
-    data: [
-      { id: 'A0002', title: 'Address to the Nation #2', videoId: 'bBY-tfHTO7g' },
-      { id: 'A0001', title: 'Address to the Nation #1', videoId: 'Mb3F2nD1vxo' },
-    ],
-  },
-  {
-    title: 'Prayer for the Nation',
-    icon: 'hand-left',
-    data: [
-      { id: 'P0005', title: 'Prayer for the Nation #5', videoId: 'jibKq6sQzLk' },
-      { id: 'P0004', title: 'Prayer for the Nation #4', videoId: 'KLcLw_WqCts' },
-      { id: 'P0003', title: 'Prayer for the Nation #3', videoId: 'YlfMskOhBfc' },
-      { id: 'P0002', title: 'Prayer for the Nation #2', videoId: 'hHmjoZNHrFg' },
-      { id: 'P0001', title: 'Prayer for the Nation #1', videoId: 'uv8o_rGSbw0' },
-    ],
-  },
-  {
-    title: 'Worship / Adoration',
-    icon: 'musical-notes',
-    data: [
-      { id: 'W0004', title: 'Worship by Dr. Victoria Noel', videoId: 'PMSrZ8J_xYA' },
-      { id: 'W0003', title: 'Worship by Pasteur Noel #3', videoId: '5QjZUtfPoMs' },
-      { id: 'W0002', title: 'Worship by Pasteur Noel #2', videoId: 'ZS3YS5Q7qJ0' },
-      { id: 'W0001', title: 'Worship by Pasteur Noel #1', videoId: 'gTUZ4foHb98' },
-    ],
-  },
-  {
-    title: 'Bouyon Cho Show',
-    icon: 'people',
-    data: [
-      { id: 'S0001', title: 'Family Presentation', videoId: 'DYaV4B0SB0g' },
-    ],
-  },
+const WEBSITE_BASE = 'https://www.hallelujahinthecity.org';
+const VIDEO_PAGES = [
+  { id: '1', page: 'video-1.htm' },
+  { id: '2', page: 'video-2.htm' },
+  { id: '3', page: 'video-3.htm' },
+  { id: '4', page: 'video-4.htm' },
 ];
 
-export default function PastSermonsScreen() {
-  const [playingVideo, setPlayingVideo] = useState(null);
-  const [collapsed, setCollapsed] = useState({});
+function extractYouTubeId(html) {
+  const match = html.match(/youtube\.com\/embed\/([a-zA-Z0-9_-]+)/);
+  return match ? match[1] : null;
+}
 
-  const toggleSection = (title) => {
-    setCollapsed(prev => ({ ...prev, [title]: !prev[title] }));
+function extractTitle(html) {
+  const match = html.match(/<h\d[^>]*class="[^"]*vid-title[^"]*"[^>]*>(.*?)<\/h\d>/i)
+    || html.match(/<h1[^>]*>(.*?)<\/h1>/i)
+    || html.match(/<h2[^>]*>(.*?)<\/h2>/i);
+  return match ? match[1].replace(/<[^>]+>/g, '').trim() : null;
+}
+
+export default function PastSermonsScreen() {
+  const [videos, setVideos] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [playingVideo, setPlayingVideo] = useState(null);
+
+  useEffect(() => {
+    loadVideos();
+  }, []);
+
+  const loadVideos = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const results = await Promise.all(
+        VIDEO_PAGES.map(async ({ id, page }) => {
+          const res = await fetch(`${WEBSITE_BASE}/${page}`);
+          const html = await res.text();
+          const videoId = extractYouTubeId(html);
+          const title = extractTitle(html);
+          return videoId ? { id, videoId, title: title || `Video ${id}` } : null;
+        })
+      );
+      setVideos(results.filter(Boolean));
+    } catch (e) {
+      setError('Unable to load videos. Please check your internet connection.');
+    }
+    setLoading(false);
   };
+
+  if (loading) {
+    return (
+      <View style={[styles.container, styles.center]}>
+        <ActivityIndicator size="large" color={COLORS.secondary} />
+        <Text style={styles.loadingText}>Loading videos...</Text>
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={[styles.container, styles.center]}>
+        <Ionicons name="cloud-offline" size={48} color={COLORS.secondary} />
+        <Text style={styles.errorText}>{error}</Text>
+        <TouchableOpacity style={styles.retryBtn} onPress={loadVideos}>
+          <Text style={styles.retryText}>Retry</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
-      <SectionList
-        sections={SERMON_CATEGORIES.map(cat => ({
-          ...cat,
-          data: collapsed[cat.title] ? [] : cat.data,
-        }))}
+      <FlatList
+        data={videos}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.list}
-        renderSectionHeader={({ section }) => {
-          const cat = SERMON_CATEGORIES.find(c => c.title === section.title);
-          const isCollapsed = collapsed[section.title];
-          return (
-            <TouchableOpacity style={styles.sectionHeader} onPress={() => toggleSection(section.title)}>
-              <Ionicons name={cat.icon} size={20} color={COLORS.secondary} />
-              <Text style={styles.sectionTitle}>{section.title}</Text>
-              <Text style={styles.sectionCount}>{cat.data.length}</Text>
-              <Ionicons name={isCollapsed ? 'chevron-down' : 'chevron-up'} size={18} color={COLORS.textLight} />
-            </TouchableOpacity>
-          );
-        }}
         renderItem={({ item }) => (
-          <TouchableOpacity style={styles.videoRow} onPress={() => setPlayingVideo(item)}>
+          <TouchableOpacity style={styles.videoCard} onPress={() => setPlayingVideo(item)}>
             <Image
-              source={{ uri: `https://i.ytimg.com/vi/${item.videoId}/mqdefault.jpg` }}
+              source={{ uri: `https://i.ytimg.com/vi/${item.videoId}/hqdefault.jpg` }}
               style={styles.thumb}
             />
-            <View style={styles.videoInfo}>
-              <Text style={styles.videoTitle} numberOfLines={2}>{item.title}</Text>
-              <Text style={styles.videoId}>{item.id}</Text>
+            <View style={styles.playOverlay}>
+              <Ionicons name="play-circle" size={56} color="rgba(255,255,255,0.9)" />
             </View>
-            <Ionicons name="play-circle" size={28} color={COLORS.secondary} />
+            <View style={styles.videoInfo}>
+              <Text style={styles.videoTitle}>{item.title}</Text>
+            </View>
           </TouchableOpacity>
         )}
-        stickySectionHeadersEnabled={false}
       />
 
       <Modal visible={!!playingVideo} animationType="slide" onRequestClose={() => setPlayingVideo(null)}>
@@ -134,18 +112,13 @@ export default function PastSermonsScreen() {
           </View>
           {playingVideo && (
             <WebView
-              source={{ uri: `https://m.youtube.com/watch?v=${playingVideo.videoId}` }}
+              source={{ html: `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><style>*{margin:0;padding:0}html,body{width:100%;height:100%;background:#000}iframe{width:100%;height:100%;border:0}</style></head><body><iframe src="https://www.youtube.com/embed/${playingVideo.videoId}?autoplay=1&playsinline=1&rel=0" allow="autoplay;encrypted-media;fullscreen" allowfullscreen></iframe></body></html>` }}
               style={styles.player}
               javaScriptEnabled
               allowsInlineMediaPlayback
               mediaPlaybackRequiresUserAction={false}
               setSupportMultipleWindows={false}
               allowsFullscreenVideo
-              userAgent="Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
-              onShouldStartLoadWithRequest={(request) => {
-                if (request.url.includes('youtube.com') || request.url.includes('googlevideo.com') || request.url.includes('google.com') || request.url.includes('gstatic.com') || request.url.includes('ytimg.com')) return true;
-                return false;
-              }}
             />
           )}
           <View style={styles.playerInfo}>
@@ -159,27 +132,27 @@ export default function PastSermonsScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.primary },
-  list: { paddingBottom: 20 },
-  sectionHeader: {
-    flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff',
-    paddingVertical: 14, paddingHorizontal: 15, marginTop: 10, marginHorizontal: 12,
-    borderRadius: 10, gap: 10, shadowColor: '#000', shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.08, shadowRadius: 2, elevation: 2,
+  center: { justifyContent: 'center', alignItems: 'center' },
+  list: { padding: 12, gap: 12 },
+  loadingText: { color: COLORS.textWhite, marginTop: 12, fontSize: 15 },
+  errorText: { color: COLORS.textWhite, marginTop: 12, fontSize: 15, textAlign: 'center', paddingHorizontal: 30 },
+  retryBtn: {
+    marginTop: 16, backgroundColor: COLORS.secondary, paddingVertical: 10,
+    paddingHorizontal: 24, borderRadius: 8,
   },
-  sectionTitle: { flex: 1, fontSize: 16, fontWeight: '700', color: COLORS.primary },
-  sectionCount: {
-    fontSize: 13, fontWeight: '600', color: COLORS.textWhite, backgroundColor: COLORS.secondary,
-    paddingHorizontal: 8, paddingVertical: 2, borderRadius: 10, overflow: 'hidden',
+  retryText: { color: '#fff', fontSize: 15, fontWeight: '700' },
+  videoCard: {
+    backgroundColor: '#fff', borderRadius: 12, overflow: 'hidden',
+    shadowColor: '#000', shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1, shadowRadius: 4, elevation: 3,
   },
-  videoRow: {
-    flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff',
-    marginHorizontal: 12, paddingVertical: 10, paddingHorizontal: 12,
-    borderBottomWidth: 1, borderBottomColor: '#f0f0f0',
+  thumb: { width: '100%', height: 200, backgroundColor: '#ddd' },
+  playOverlay: {
+    position: 'absolute', top: 0, left: 0, right: 0, height: 200,
+    justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.2)',
   },
-  thumb: { width: 80, height: 50, borderRadius: 6, backgroundColor: '#ddd' },
-  videoInfo: { flex: 1, marginLeft: 10 },
-  videoTitle: { fontSize: 14, fontWeight: '600', color: COLORS.text, lineHeight: 18 },
-  videoId: { fontSize: 11, color: COLORS.textLight, marginTop: 2 },
+  videoInfo: { padding: 14 },
+  videoTitle: { fontSize: 16, fontWeight: '700', color: COLORS.text },
   playerContainer: { flex: 1, backgroundColor: '#000' },
   playerHeader: {
     flexDirection: 'row', alignItems: 'center', backgroundColor: COLORS.primary,

@@ -159,18 +159,13 @@ export default function SermonsScreen() {
           </View>
           {playingVideo && (
             <WebView
-              source={{ uri: `https://m.youtube.com/watch?v=${playingVideo.id}` }}
+              source={{ html: `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><style>*{margin:0;padding:0}html,body{width:100%;height:100%;background:#000}iframe{width:100%;height:100%;border:0}</style></head><body><iframe src="https://www.youtube.com/embed/${playingVideo.id}?autoplay=1&playsinline=1&rel=0" allow="autoplay;encrypted-media;fullscreen" allowfullscreen></iframe></body></html>` }}
               style={styles.player}
               javaScriptEnabled
               allowsInlineMediaPlayback
               mediaPlaybackRequiresUserAction={false}
               setSupportMultipleWindows={false}
               allowsFullscreenVideo
-              userAgent="Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
-              onShouldStartLoadWithRequest={(request) => {
-                if (request.url.includes('youtube.com') || request.url.includes('googlevideo.com') || request.url.includes('google.com') || request.url.includes('gstatic.com') || request.url.includes('ytimg.com')) return true;
-                return false;
-              }}
             />
           )}
           <View style={styles.playerInfo}>

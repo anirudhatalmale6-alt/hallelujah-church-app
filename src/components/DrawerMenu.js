@@ -6,7 +6,8 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, CHURCH } from '../constants/theme';
 
-const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=org.hallelujahinthecity.app';
+const IOS_URL = 'https://apps.apple.com/app/id6768457288';
+const ANDROID_URL = 'https://play.google.com/store/apps/details?id=com.hallelujahinthecity.app';
 
 const DRAWER_WIDTH = Dimensions.get('window').width * 0.8;
 
@@ -106,7 +107,7 @@ export default function DrawerMenu({ visible, onClose, navigation }) {
 
           <View style={styles.divider} />
 
-          <DrawerItem icon="share-social" label="Share This App" color="#8b6914" onPress={() => { onClose(); Share.share({ message: `Download the ${CHURCH.name} app - ${CHURCH.tagline}\n${PLAY_STORE_URL}` }); }} />
+          <DrawerItem icon="share-social" label="Share This App" color="#8b6914" onPress={() => { onClose(); Share.share({ message: `Download the ${CHURCH.name} app - ${CHURCH.tagline}\n\nApple: ${IOS_URL}\nAndroid: ${ANDROID_URL}` }); }} />
 
           <View style={{ height: 30 }} />
         </ScrollView>

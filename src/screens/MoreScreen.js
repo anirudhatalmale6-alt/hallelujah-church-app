@@ -3,7 +3,8 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Linking, Share } 
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, CHURCH } from '../constants/theme';
 
-const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=org.hallelujahinthecity.app';
+const IOS_URL = 'https://apps.apple.com/app/id6768457288';
+const ANDROID_URL = 'https://play.google.com/store/apps/details?id=com.hallelujahinthecity.app';
 
 const MenuItem = ({ icon, label, onPress, color }) => (
   <TouchableOpacity style={styles.menuItem} onPress={onPress}>
@@ -54,10 +55,10 @@ export default function MoreScreen({ navigation }) {
 
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Share</Text>
-        <MenuItem icon="share-social" label="Share This App" onPress={() => Share.share({ message: `Download the ${CHURCH.name} app - ${CHURCH.tagline}\n${PLAY_STORE_URL}` })} color="#8b6914" />
+        <MenuItem icon="share-social" label="Share This App" onPress={() => Share.share({ message: `Download the ${CHURCH.name} app - ${CHURCH.tagline}\n\nApple: ${IOS_URL}\nAndroid: ${ANDROID_URL}` })} color="#8b6914" />
       </View>
 
-      <Text style={styles.version}>Hallelujah In The City App v2.4.5</Text>
+      <Text style={styles.version}>Hallelujah In The City App v2.4.2</Text>
       <View style={{ height: 20 }} />
     </ScrollView>
   );
